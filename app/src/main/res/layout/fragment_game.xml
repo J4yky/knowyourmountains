@@ -9,14 +9,74 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ekran gry"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="367dp"
+            android:layout_height="282dp"
+            android:layout_marginTop="28dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baranierohy" />
+
+        <Button
+            android:id="@+id/question2"
+            android:layout_width="175dp"
+            android:layout_height="65dp"
+            android:layout_margin="15dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/question4"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/question1"
+            android:layout_width="175dp"
+            android:layout_height="65dp"
+            android:layout_margin="15dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="12dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/question3"
+            app:layout_constraintEnd_toStartOf="@+id/question2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/question4"
+            android:layout_width="175dp"
+            android:layout_height="65dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="60dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/question3"
+            android:layout_width="175dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="60dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/question4"
+            app:layout_constraintHorizontal_bias="0.326"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pytanie nr:"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/question1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.856" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
