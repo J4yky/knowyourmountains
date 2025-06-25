@@ -59,9 +59,18 @@ class StartFragment : Fragment() {
         }
 
         binding.startButton.setOnClickListener {
-            // Tutaj możesz przekazać selectedQuestionCount do GameFragment
-            // (omówimy to w następnym kroku, ale wiedz, że można)
-            findNavController().navigate(R.id.action_startFragment_to_gameFragment)
+            val category: String = when (selectedCategoryButton?.text.toString()) {
+                "Tatry: Polskie" -> "Polska"
+                "Tatry: Słowackie" -> "Słowacja"
+                "Tatry: Całość" -> "Całość"
+                else -> "Całość"
+            }
+
+            val action = StartFragmentDirections.actionStartFragmentToGameFragment(
+                category = category,
+                questionCount = selectedQuestionCount
+            )
+            findNavController().navigate(action)
         }
 
         val categoryButtons = listOf(

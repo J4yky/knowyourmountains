@@ -3,69 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".GameFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="367dp"
-            android:layout_height="282dp"
-            android:layout_marginTop="28dp"
+            android:id="@+id/imageViewQuestion"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="4:3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baranierohy" />
-
-        <Button
-            android:id="@+id/question2"
-            android:layout_width="175dp"
-            android:layout_height="65dp"
-            android:layout_margin="15dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/question4"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/question1"
-            android:layout_width="175dp"
-            android:layout_height="65dp"
-            android:layout_margin="15dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="12dp"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/question3"
-            app:layout_constraintEnd_toStartOf="@+id/question2"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/question4"
-            android:layout_width="175dp"
-            android:layout_height="65dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="60dp"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/question3"
-            android:layout_width="175dp"
-            android:layout_height="65dp"
-            android:layout_marginBottom="60dp"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/question4"
-            app:layout_constraintHorizontal_bias="0.326"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:srcCompat="@drawable/baranierohy"
+            tools:srcCompat="@drawable/baranierohy"/>
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textViewQuestionProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pytanie nr:"
@@ -74,8 +34,81 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewQuestion"
             app:layout_constraintVertical_bias="0.856" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_buttons_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_buttons_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <Button
+            android:id="@+id/buttonAnswer1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            app:layout_constraintDimensionRatio="3:1"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAnswer3"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAnswer2"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_buttons_top" />
+
+
+        <Button
+            android:id="@+id/buttonAnswer2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"
+            app:layout_constraintDimensionRatio="3:1"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAnswer4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/buttonAnswer1"
+            app:layout_constraintTop_toTopOf="@+id/guideline_buttons_top" />
+
+
+        <Button
+            android:id="@+id/buttonAnswer3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            app:layout_constraintDimensionRatio="3:1"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_buttons_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAnswer4"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAnswer1" />
+
+
+        <Button
+            android:id="@+id/buttonAnswer4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        app:layout_constraintDimensionRatio="3:1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_buttons_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/buttonAnswer3"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAnswer2" />
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
