@@ -1,12 +1,15 @@
 package com.example.knowyourmountains
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.compose.material3.Button
+import android.os.Handler
+import android.os.Looper
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.knowyourmountains.databinding.FragmentGameBinding
@@ -16,21 +19,22 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
 
-    private var allQuestions: List<Question> = emptyList() // Pełna pula pytań
-    private var currentQuizQuestions: MutableList<Question> = mutableListOf() // Pytania dla bieżącej gry
-    private var currentQuestionIndex: Int = 0 // Indeks bieżącego pytania
-    private var score: Int = 0 // Liczba poprawnych odpowiedzi
-    private var totalQuestionsCount: Int = 0 // Całkowita liczba pytań w tej grze
+    private var allQuestions: List<Question> = emptyList()
+    private var currentQuizQuestions: MutableList<Question> = mutableListOf()
+    private var currentQuestionIndex: Int = 0
+    private var score: Int = 0
+    private var totalQuestionsCount: Int = 0
 
-    private var selectedCategory: String = "Całość" // "Polska", "Słowacja", "Całość"
+    private var selectedCategory: String = "Całość"
     private var numberOfQuestions: Int = 20
+
+    private lateinit var answerButtons: List<Button>
+
+    private var defaultButtonBackgroundTintList: ColorStateList? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Tutaj odbieramy argumenty przekazane ze StartFragment (omówimy to za chwilę)
-        // Na razie przyjmijmy domyślne wartości lub ustawimy je na stałe dla testów
         arguments?.let {
-            // Te nazwy argumentów będą pochodzić z Safe Args
             selectedCategory = it.getString("category", "Całość")
             numberOfQuestions = it.getInt("questionCount", 20)
         }
@@ -47,12 +51,22 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupQuiz()
+        answerButtons = listOf(
+            binding.buttonAnswer1,
+            binding.buttonAnswer2,
+            binding.buttonAnswer3,
+            binding.buttonAnswer4
+        )
 
-        binding.buttonAnswer1.setOnClickListener { checkAnswer((it as Button).text.toString()) }
-        binding.buttonAnswer2.setOnClickListener { checkAnswer((it as Button).text.toString()) }
-        binding.buttonAnswer3.setOnClickListener { checkAnswer((it as Button).text.toString()) }
-        binding.buttonAnswer4.setOnClickListener { checkAnswer((it as Button).text.toString()) }
+        defaultButtonBackgroundTintList = binding.buttonAnswer1.backgroundTintList
+
+        answerButtons.forEach { button ->
+            button.setOnClickListener {
+                setButtonsEnabled(false)
+                checkAnswer(it as Button)
+            }
+        }
+        setupQuiz()
     }
 
     private fun setupQuiz() {
@@ -68,7 +82,6 @@ class GameFragment : Fragment() {
         }
 
         currentQuizQuestions = filtered.shuffled().take(numberOfQuestions).toMutableList()
-
         totalQuestionsCount = currentQuizQuestions.size
 
         if (totalQuestionsCount == 0) {
@@ -81,6 +94,9 @@ class GameFragment : Fragment() {
     }
 
     private fun loadQuestion() {
+        resetButtonBackgrounds()
+        setButtonsEnabled(true)
+
         if (currentQuestionIndex >= totalQuestionsCount) {
             showQuizResult()
             return
@@ -89,29 +105,17 @@ class GameFragment : Fragment() {
         val currentQuestion = currentQuizQuestions[currentQuestionIndex]
 
         binding.imageViewQuestion.setImageResource(currentQuestion.imageResId)
-
         binding.textViewQuestionProgress.text = "Pytanie: ${currentQuestionIndex + 1}/$totalQuestionsCount"
 
         val correctAnswer = currentQuestion.mountainName
-
         val incorrectAnswersPool = allQuestions.map { it.mountainName }.distinct().filter { it != correctAnswer }.toMutableList()
 
-        if (incorrectAnswersPool.size < 3) {
-            while (incorrectAnswersPool.size < 3) {
-                incorrectAnswersPool.add("Inny Szczyt ${incorrectAnswersPool.size + 1}")
-            }
+        while (incorrectAnswersPool.size < 3) {
+            incorrectAnswersPool.add("Inny Szczyt ${incorrectAnswersPool.size + 1}")
         }
 
         val wrongAnswers = incorrectAnswersPool.shuffled().take(3)
-
         val answerOptions = (wrongAnswers + correctAnswer).shuffled()
-
-        val answerButtons = listOf(
-            binding.buttonAnswer1,
-            binding.buttonAnswer2,
-            binding.buttonAnswer3,
-            binding.buttonAnswer4
-        )
 
         answerOptions.forEachIndexed { index, answerText ->
             if (index < answerButtons.size) {
@@ -120,18 +124,33 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun checkAnswer(selectedAnswer: String) {
+    private fun checkAnswer(clickedButton: Button) {
         val currentQuestion = currentQuizQuestions[currentQuestionIndex]
+        val selectedAnswer = clickedButton.text.toString()
+        val correctAnswer = currentQuestion.mountainName
 
-        if (selectedAnswer == currentQuestion.mountainName) {
+        val correctColor = ContextCompat.getColor(requireContext(), R.color.olive_drab)
+        val wrongColor = ContextCompat.getColor(requireContext(), R.color.red)
+
+        if (selectedAnswer == correctAnswer) {
             score++
+            clickedButton.backgroundTintList = ColorStateList.valueOf(correctColor)
             Toast.makeText(context, "Poprawna odpowiedź!", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "Błędna odpowiedź! Poprawna to: ${currentQuestion.mountainName}", Toast.LENGTH_LONG).show()
+            clickedButton.backgroundTintList = ColorStateList.valueOf(wrongColor)
+            Toast.makeText(context, "Błędna odpowiedź!", Toast.LENGTH_LONG).show()
+
+            answerButtons.forEach { button ->
+                if (button.text.toString() == correctAnswer) {
+                    button.backgroundTintList = ColorStateList.valueOf(correctColor)
+                }
+            }
         }
 
-        currentQuestionIndex++
-        loadQuestion()
+        Handler(Looper.getMainLooper()).postDelayed({
+            currentQuestionIndex++
+            loadQuestion()
+        }, 1500)
     }
 
     private fun showQuizResult() {
@@ -142,6 +161,16 @@ class GameFragment : Fragment() {
             questionCount = numberOfQuestions
         )
         findNavController().navigate(action)
+    }
+
+    private fun setButtonsEnabled(enabled: Boolean) {
+        answerButtons.forEach { it.isEnabled = enabled }
+    }
+
+    private fun resetButtonBackgrounds() {
+        answerButtons.forEach { button ->
+            button.backgroundTintList = defaultButtonBackgroundTintList
+        }
     }
 
     override fun onDestroyView() {

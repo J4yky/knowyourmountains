@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.knowyourmountains.databinding.FragmentStartBinding
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.materialswitch.MaterialSwitch
 
 class StartFragment : Fragment() {
 
@@ -45,16 +46,26 @@ class StartFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        binding.themeSwitch.isChecked =
-            AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        val themeSwitch: MaterialSwitch = binding.themeSwitch
 
-        binding.themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+        val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+        if (currentNightMode == AppCompatDelegate.MODE_NIGHT_YES ||
+            (currentNightMode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM && isSystemInNightMode())
+        ) {
+            themeSwitch.isChecked = true
+            themeSwitch.text = "Tryb Dzienny"
+        } else {
+            themeSwitch.isChecked = false
+            themeSwitch.text = "Tryb Nocny"
+        }
+
+        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                // Ustaw tryb nocny
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                themeSwitch.text = "Tryb Dzienny"
             } else {
-                // Ustaw tryb dzienny
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                themeSwitch.text = "Tryb Nocny"
             }
         }
 
@@ -104,6 +115,11 @@ class StartFragment : Fragment() {
         binding.buttonPolishTatry.setOnClickListener(categoryClickListener)
         binding.buttonSlovakTatry.setOnClickListener (categoryClickListener)
         binding.buttonAllTatry.setOnClickListener(categoryClickListener)
+    }
+
+    private fun isSystemInNightMode(): Boolean {
+        val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        return currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
     override fun onDestroyView() {
